@@ -11,7 +11,7 @@
 	<groupId>com.moviefy</groupId>
 	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>backend</name>
+	<name>moviefy</name>
 	<description>Backend project for moviefy</description>
 	<properties>
 		<java.version>19</java.version>
