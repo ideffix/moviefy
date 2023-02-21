@@ -16,7 +16,7 @@ import java.util.Optional;
 public class MovieController {
     @Autowired
     MovieRepository movieRepository;
-    @Autowired 
+    @Autowired
     ActorRepository actorRepository;
 
 
@@ -56,10 +56,25 @@ public class MovieController {
             }
         }
         for (Actor actor : actors) {
-            if (actor.getName().toUpperCase(Locale.ROOT).contains(title.toUpperCase())) {
+            if (actor.getFirstName().toUpperCase(Locale.ROOT).contains(title.toUpperCase())) {
                 actorFound.add(actor);
             }
         }
         return new QueryResponse(movieFound, actorFound);
     }
+
+    @PutMapping("/movie/{movieId}/{actorId}")
+    public void addActorToMovie(@PathVariable long movieId, @PathVariable long actorId) {
+        Optional<Movie> movie = movieRepository.findById(movieId);
+        Optional<Actor> actor = actorRepository.findById(actorId);
+
+        if (movie.isEmpty() || actor.isEmpty()) {
+            throw  new RuntimeException("Movie or actor not found!");
+        }
+
+        movie.get().getActors().add(actor.get());
+
+        movieRepository.save(movie.get());
+    }
+
 }

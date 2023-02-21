@@ -12,7 +12,7 @@ public class Search {
 
     public Actor searchActorByName(String name) {
         for (Actor actor : actors) {
-            if (actor.getName().equals(name)) {
+            if (actor.getFirstName().equals(name) || actor.getLastName().equals(name)) {
                 return actor;
             }
         }

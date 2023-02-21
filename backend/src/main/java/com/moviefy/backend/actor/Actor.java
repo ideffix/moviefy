@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.time.LocalDate;
+
 
 @Entity
 public class Actor {
@@ -12,29 +14,34 @@ public class Actor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String description;
-    private String birthdate;
+    private LocalDate birthdate;
     private String height;
-//    private List<Movie> moviesThatHePlayedIn = new ArrayList<>();
 
-    public Actor() {
+    public Long getId() {
+        return id;
     }
 
-    public Actor(String name, String description, String birthdate, String height /*String moviesThatHePlayedIn*/) {
-        this.name = name;
-        this.description = description;
-        this.birthdate = birthdate;
-        this.height = height;
-//        this.moviesThatHePlayedIn = moviesThatHePlayedIn;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getDescription() {
@@ -45,11 +52,11 @@ public class Actor {
         this.description = description;
     }
 
-    public String getBirthdate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(String birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
     }
 
@@ -59,29 +66,5 @@ public class Actor {
 
     public void setHeight(String height) {
         this.height = height;
-    }
-
-//    public String getMoviesThatHePlayedIn() {
-//        return moviesThatHePlayedIn;
-//    }
-//
-//    public void setMoviesThatHePlayedIn(String moviesThatHePlayedIn) {
-//        this.moviesThatHePlayedIn = moviesThatHePlayedIn;
-//    }
-
-    public long getId() {
-        return id;
-    }
-
-    @Override
-    public String toString() {
-        return "Actor{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", birthdate='" + birthdate + '\'' +
-                ", height='" + height + '\'' +
-//                ", moviesThatHePlayedIn='" + moviesThatHePlayedIn + '\'' +
-                ", id=" + id +
-                '}';
     }
 }

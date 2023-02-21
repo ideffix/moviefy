@@ -22,4 +22,5 @@ public class ActorController {
     public Iterable<Actor> getActors() {
         return actorRepository.findAll();
     }
+
 }
