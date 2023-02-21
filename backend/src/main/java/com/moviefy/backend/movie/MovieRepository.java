@@ -12,6 +12,4 @@ import java.util.List;
 
 @Repository
 public interface MovieRepository extends CrudRepository<Movie, Long> {
-
-    List<Movie> findByTitle(String title);
 }

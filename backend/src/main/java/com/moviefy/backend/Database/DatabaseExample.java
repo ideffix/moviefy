@@ -32,7 +32,7 @@ public class DatabaseExample {
         try {
             Statement statement = connectToTheDatabase();
             statement.executeUpdate("INSERT INTO movie(title, rating, direction, scenario, genre, production, premiere, poster, moviePhotos, awards) VALUES " +
-                    "('" + movie.getTitle() + "', " + movie.getRating() + ", '" + movie.getDirection() + "', '" + movie.getScenario() + "', '" + movie.getGenre() + "', '" + movie.getProduction() + "', '" + movie.getPremiere() + "', '" + movie.getPoster() + "', '" + movie.getMoviePhotos() + "', '" + movie.getAwards() + "')");
+                    "('" + movie.getTitle() + "', " + movie.getRating() + ", '" + movie.getDirector() + "', '" + movie.getScenario() + "', '" + movie.getGenre() + "', '" + movie.getProduction() + "', '" + movie.getPremiere() + "', '" + movie.getPoster() + "', '" + movie.getMoviePhotos() + "', '" + movie.getAwards() + "')");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

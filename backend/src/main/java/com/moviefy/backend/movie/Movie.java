@@ -3,6 +3,7 @@ package com.moviefy.backend.movie;
 import com.moviefy.backend.actor.Actor;
 import jakarta.persistence.*;
 
+import java.net.URL;
 import java.util.List;
 
 @Entity
@@ -13,17 +14,24 @@ public class Movie {
     private Long id;
     private String title;
     private int rating;
-    private String direction;
+    private String director;
     private String scenario;
-    private String genre;
+    @ElementCollection(targetClass = Genre.class)
+    @CollectionTable
+    @Enumerated(EnumType.STRING)
+    private List<Genre> genre;
     private String production;
     private int premiere;
-    private String poster;
-    private String moviePhotos;
+    private URL poster;
+    @ElementCollection
+    private List<URL> moviePhotos;
 
     @OneToMany
     private List<Actor> actors;
-    private String awards;
+    @ElementCollection(targetClass = Awards.class)
+    @CollectionTable
+    @Enumerated(EnumType.STRING)
+    private List<Awards> awards;
 
     public Movie() {
     }
@@ -44,12 +52,12 @@ public class Movie {
         this.rating = rating;
     }
 
-    public String getDirection() {
-        return direction;
+    public String getDirector() {
+        return director;
     }
 
-    public void setDirection(String direction) {
-        this.direction = direction;
+    public void setDirector(String director) {
+        this.director = director;
     }
 
     public String getScenario() {
@@ -60,11 +68,11 @@ public class Movie {
         this.scenario = scenario;
     }
 
-    public String getGenre() {
+    public List<Genre> getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(List<Genre> genre) {
         this.genre = genre;
     }
 
@@ -84,19 +92,19 @@ public class Movie {
         this.premiere = premiere;
     }
 
-    public String getPoster() {
+    public URL getPoster() {
         return poster;
     }
 
-    public void setPoster(String poster) {
+    public void setPoster(URL poster) {
         this.poster = poster;
     }
 
-    public String getMoviePhotos() {
+    public List<URL> getMoviePhotos() {
         return moviePhotos;
     }
 
-    public void setMoviePhotos(String moviePhotos) {
+    public void setMoviePhotos(List<URL> moviePhotos) {
         this.moviePhotos = moviePhotos;
     }
 
@@ -104,11 +112,11 @@ public class Movie {
         return actors;
     }
 
-    public String getAwards() {
+    public List<Awards> getAwards() {
         return awards;
     }
 
-    public void setAwards(String awards) {
+    public void setAwards(List<Awards> awards) {
         this.awards = awards;
     }
 
@@ -121,7 +129,7 @@ public class Movie {
         return "Movie{" +
                 "title='" + title + '\'' +
                 ", rating=" + rating +
-                ", direction='" + direction + '\'' +
+                ", direction='" + director + '\'' +
                 ", scenario='" + scenario + '\'' +
                 ", genre='" + genre + '\'' +
                 ", production='" + production + '\'' +

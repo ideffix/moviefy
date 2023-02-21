@@ -1,29 +1,32 @@
 package com.moviefy.backend.actor;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 
 @Entity
 public class Actor {
 
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String description;
     private String birthdate;
     private String height;
-    private String moviesThatHePlayedIn;
+//    private List<Movie> moviesThatHePlayedIn = new ArrayList<>();
 
     public Actor() {
     }
 
-    public Actor(String name, String description, String birthdate, String height, String moviesThatHePlayedIn, long id) {
+    public Actor(String name, String description, String birthdate, String height /*String moviesThatHePlayedIn*/) {
         this.name = name;
         this.description = description;
         this.birthdate = birthdate;
         this.height = height;
-        this.moviesThatHePlayedIn = moviesThatHePlayedIn;
-        this.id = id;
+//        this.moviesThatHePlayedIn = moviesThatHePlayedIn;
     }
 
     public String getName() {
@@ -58,13 +61,13 @@ public class Actor {
         this.height = height;
     }
 
-    public String getMoviesThatHePlayedIn() {
-        return moviesThatHePlayedIn;
-    }
-
-    public void setMoviesThatHePlayedIn(String moviesThatHePlayedIn) {
-        this.moviesThatHePlayedIn = moviesThatHePlayedIn;
-    }
+//    public String getMoviesThatHePlayedIn() {
+//        return moviesThatHePlayedIn;
+//    }
+//
+//    public void setMoviesThatHePlayedIn(String moviesThatHePlayedIn) {
+//        this.moviesThatHePlayedIn = moviesThatHePlayedIn;
+//    }
 
     public long getId() {
         return id;
@@ -77,7 +80,7 @@ public class Actor {
                 ", description='" + description + '\'' +
                 ", birthdate='" + birthdate + '\'' +
                 ", height='" + height + '\'' +
-                ", moviesThatHePlayedIn='" + moviesThatHePlayedIn + '\'' +
+//                ", moviesThatHePlayedIn='" + moviesThatHePlayedIn + '\'' +
                 ", id=" + id +
                 '}';
     }
