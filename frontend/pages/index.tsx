@@ -1,4 +1,6 @@
 import {GetServerSideProps} from "next";
+import {Header} from "../components/Header/Header";
+import React from "react";
 
 interface ServerProps {
   name: string;
@@ -22,9 +24,22 @@ export const getServerSideProps: GetServerSideProps<ServerProps> = async (contex
 export default function Home({name, version}: ServerProps) {
   return (
     <>
-      <h1>Moviefy</h1>
+      <Header />
       <h1>App name: {name}</h1>
       <h2>Version: {version}</h2>
+      <style jsx global>{`
+        html,
+        body {
+          padding: 0;
+          margin: 0;
+          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+            sans-serif;
+        }
+        * {
+          box-sizing: border-box;
+        }
+      `}</style>
     </>
   )
 }
