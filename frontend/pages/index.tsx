@@ -22,6 +22,7 @@ export const getServerSideProps: GetServerSideProps<ServerProps> = async (contex
 export default function Home({name, version}: ServerProps) {
   return (
     <>
+      <h1>Moviefy</h1>
       <h1>App name: {name}</h1>
       <h2>Version: {version}</h2>
     </>
