@@ -75,17 +75,17 @@ public class MovieController {
             throw new RuntimeException("Movie not found!");
         }
         Rating rating1 = new Rating(rating);
-        movie.get().getRatings().add(rating1);
         ratingRepository.save(rating1);
-        int suma = 0;
-        int dlugosc = 0;
-        for (Rating rating2 : movie.get().getRatings()) {
-            suma += rating2.getRating();
-            dlugosc++;
-        }
-        int wynik = suma/dlugosc;
+        movie.get().getRatings().add(rating1);
+        movieRepository.save(movie.get());
+
+        int average = (int) Math.round(movie.get().getRatings().stream()
+                .mapToInt(Rating::getRating)
+                .average()
+                .orElseThrow(() -> new RuntimeException("No ratings available!")));
+
         Movie movie1 = movie.get();
-        movie1.setRating(wynik);
+        movie1.setRating(average);
         movieRepository.save(movie1);
     }
 
