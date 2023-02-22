@@ -18,6 +18,8 @@ public class MovieController {
     MovieRepository movieRepository;
     @Autowired
     ActorRepository actorRepository;
+    @Autowired
+    RatingRepository ratingRepository;
 
 
     @CrossOrigin
@@ -63,6 +65,30 @@ public class MovieController {
         return new QueryResponse(movieFound, actorFound);
     }
 
+    @PutMapping("/movie/rating/{movieId}/{rating}")
+    public void ratingVideo(@PathVariable long movieId, @PathVariable int rating) {
+        if (!(0 <= rating && rating <= 10)) {
+            throw new RuntimeException("Wrong value given!\n");
+        }
+        Optional<Movie> movie = movieRepository.findById(movieId);
+        if (movie.isEmpty()) {
+            throw new RuntimeException("Movie not found!");
+        }
+        Rating rating1 = new Rating(rating);
+        movie.get().getRatings().add(rating1);
+        ratingRepository.save(rating1);
+        int suma = 0;
+        int dlugosc = 0;
+        for (Rating rating2 : movie.get().getRatings()) {
+            suma += rating2.getRating();
+            dlugosc++;
+        }
+        int wynik = suma/dlugosc;
+        Movie movie1 = movie.get();
+        movie1.setRating(wynik);
+        movieRepository.save(movie1);
+    }
+
     @PutMapping("/movie/{movieId}/{actorId}")
     public void addActorToMovie(@PathVariable long movieId, @PathVariable long actorId) {
         Optional<Movie> movie = movieRepository.findById(movieId);
@@ -73,7 +99,6 @@ public class MovieController {
         }
 
         movie.get().getActors().add(actor.get());
-
         movieRepository.save(movie.get());
     }
 

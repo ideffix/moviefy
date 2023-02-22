@@ -4,6 +4,7 @@ import com.moviefy.backend.actor.Actor;
 import jakarta.persistence.*;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,13 +26,14 @@ public class Movie {
     private URL poster;
     @ElementCollection
     private List<URL> moviePhotos;
-
     @OneToMany
     private List<Actor> actors;
     @ElementCollection(targetClass = Awards.class)
     @CollectionTable
     @Enumerated(EnumType.STRING)
     private List<Awards> awards;
+    @OneToMany
+    List<Rating> ratings = new ArrayList<>();
 
     public Movie() {
     }
@@ -40,13 +42,27 @@ public class Movie {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public int getRating() {
         return rating;
     }
+
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
+    }
+
+    //    public int getRatings() {
+//        int suma = 0;
+//        int dlugosc = 0;
+//        for (Rating rating : ratings) {
+//            suma += rating.getRating();
+//            dlugosc++;
+//        }
+//        return suma/dlugosc;
+//    }
 
     public void setRating(int rating) {
         this.rating = rating;
@@ -128,7 +144,7 @@ public class Movie {
     public String toString() {
         return "Movie{" +
                 "title='" + title + '\'' +
-                ", rating=" + rating +
+                ", rating=" + ratings +
                 ", direction='" + director + '\'' +
                 ", scenario='" + scenario + '\'' +
                 ", genre='" + genre + '\'' +
