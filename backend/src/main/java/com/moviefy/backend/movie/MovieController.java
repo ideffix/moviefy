@@ -74,18 +74,15 @@ public class MovieController {
         if (movie.isEmpty()) {
             throw new RuntimeException("Movie not found!");
         }
-        Rating rating1 = new Rating(rating);
-        ratingRepository.save(rating1);
-        movie.get().getRatings().add(rating1);
-        movieRepository.save(movie.get());
-
-        int average = (int) Math.round(movie.get().getRatings().stream()
-                .mapToInt(Rating::getRating)
-                .average()
-                .orElseThrow(() -> new RuntimeException("No ratings available!")));
-
         Movie movie1 = movie.get();
-        movie1.setRating(average);
+        if (movie1.getCountRating() == 0) {
+            movie1.setRating(rating);
+        }
+        else {
+            int result = (movie1.getRating() * movie1.getCountRating() + rating) / (movie1.getCountRating() + 1);
+            movie1.setRating(result);
+        }
+        movie1.setCountRating(movie1.getCountRating() + 1);
         movieRepository.save(movie1);
     }
 

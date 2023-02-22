@@ -32,8 +32,7 @@ public class Movie {
     @CollectionTable
     @Enumerated(EnumType.STRING)
     private List<Awards> awards;
-    @OneToMany
-    List<Rating> ratings = new ArrayList<>();
+    private int countRating;
 
     public Movie() {
     }
@@ -46,23 +45,13 @@ public class Movie {
         return rating;
     }
 
-    public List<Rating> getRatings() {
-        return ratings;
+    public int getCountRating() {
+        return countRating;
     }
 
-    public void setRatings(List<Rating> ratings) {
-        this.ratings = ratings;
+    public void setCountRating(int countRating) {
+        this.countRating = countRating;
     }
-
-    //    public int getRatings() {
-//        int suma = 0;
-//        int dlugosc = 0;
-//        for (Rating rating : ratings) {
-//            suma += rating.getRating();
-//            dlugosc++;
-//        }
-//        return suma/dlugosc;
-//    }
 
     public void setRating(int rating) {
         this.rating = rating;
@@ -144,7 +133,6 @@ public class Movie {
     public String toString() {
         return "Movie{" +
                 "title='" + title + '\'' +
-                ", rating=" + ratings +
                 ", direction='" + director + '\'' +
                 ", scenario='" + scenario + '\'' +
                 ", genre='" + genre + '\'' +
