@@ -36,3 +36,19 @@
 .firstCol {
     color: #888;
 }
+
+.backgroundImg {
+    top: 0;
+    left: 50%;
+    width: 100%;
+    background-position-x: center;
+    background-position-y: top;
+    background-repeat: no-repeat;
+    background-color: #000;
+    background-size: cover;
+    height: 450px;
+}
+
+.backgroundImgContainer {
+    width: 100%;
+}
