@@ -1,48 +1,35 @@
 package com.moviefy.backend.movie;
 
 import com.moviefy.backend.actor.Actor;
-import com.moviefy.backend.actor.ActorDTO;
-import jakarta.persistence.*;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
-public class Movie {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class MovieDTO {
     private String title;
     private double rating;
     private String director;
     private String scenario;
-    @ElementCollection(targetClass = Genre.class)
-    @CollectionTable
-    @Enumerated(EnumType.STRING)
     private List<Genre> genre;
     private String production;
     private LocalDate premiere;
     private URL poster;
-    @ElementCollection
     private List<URL> moviePhotos;
-    @OneToMany
-    private List<Actor> actors;
-    @ElementCollection(targetClass = Awards.class)
-    @CollectionTable
-    @Enumerated(EnumType.STRING)
     private List<Awards> awards;
-    private int countRating;
-    public Movie() {
-    }
+    private List<Actor> actors;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public MovieDTO(Movie movie) {
+        this.title = movie.getTitle();
+        this.rating = movie.getRating();
+        this.director = movie.getDirector();
+        this.scenario = movie.getScenario();
+        this.genre = movie.getGenre();
+        this.production = movie.getProduction();
+        this.premiere = movie.getPremiere();
+        this.poster = movie.getPoster();
+        this.moviePhotos = movie.getMoviePhotos();
+        this.awards = movie.getAwards();
     }
 
     public String getTitle() {
@@ -117,14 +104,6 @@ public class Movie {
         this.moviePhotos = moviePhotos;
     }
 
-    public List<Actor> getActors() {
-        return actors;
-    }
-
-    public void setActors(List<Actor> actors) {
-        this.actors = actors;
-    }
-
     public List<Awards> getAwards() {
         return awards;
     }
@@ -133,27 +112,11 @@ public class Movie {
         this.awards = awards;
     }
 
-    public int getCountRating() {
-        return countRating;
+    public List<Actor> getActors() {
+        return actors;
     }
 
-    public void setCountRating(int countRating) {
-        this.countRating = countRating;
-    }
-
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "title='" + title + '\'' +
-                ", direction='" + director + '\'' +
-                ", scenario='" + scenario + '\'' +
-                ", genre='" + genre + '\'' +
-                ", production='" + production + '\'' +
-                ", premiere='" + premiere + '\'' +
-                ", poster='" + poster + '\'' +
-                ", moviePhotos='" + moviePhotos + '\'' +
-                ", awards='" + awards + '\'' +
-                ", id=" + id +
-                '}';
+    public void setActors(List<Actor> actors) {
+        this.actors = actors;
     }
 }

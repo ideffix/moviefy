@@ -1,10 +1,11 @@
 package com.moviefy.backend.actor;
 
-import com.moviefy.backend.movie.Movie;
-import com.moviefy.backend.movie.MovieDto;
 import com.moviefy.backend.movie.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,28 +25,25 @@ public class ActorController {
 
     @CrossOrigin
     @GetMapping("/actor")
-    public Iterable<Actor> getActors() {
-        return actorRepository.findAll();
+    public List<ActorDTO> getActors() {
+        Iterable<Actor> actors = actorRepository.findAll();
+        List<ActorDTO> actorDTOS = new ArrayList<>();
+        for (Actor iterable : actors) {
+            actorDTOS.add(new ActorDTO(iterable));
+        }
+        return actorDTOS;
     }
-
-//    @GetMapping("/actor/byname/{actorName}")
-//    public List<Actor> serchActorByName(@PathVariable String actorName) {
-//        Iterable<Actor> actors = actorRepository.findAll();
-//        List<Actor> actorList = new ArrayList<>();
-//        for (Actor actor : actors) {
-//            if (actor.getFirstName().toLowerCase().contains(actorName.toLowerCase()) ||
-//                    actor.getLastName().toLowerCase().contains(actorName.toLowerCase())) {
-//                actorList.add(actor);
-//            }
-//        }
-//        return actorList;
-////    }
 
     @GetMapping("/actor/byid/{actorId}")
-    public Optional serchActorById(@PathVariable long actorId) {
-        return actorRepository.findById(actorId);
+    public ActorDTO serchActorById(@PathVariable long actorId) {
+        Optional<Actor> actor = actorRepository.findById(actorId);
+        if (actor.isEmpty()) {
+            throw new RuntimeException("Actor not found!");
+        }
+        ActorDTO actorDTO = new ActorDTO(actor.get());
+        return actorDTO;
     }
-//
+
 ////    @PutMapping("/actor/{actorId}/{movieId}")
 ////    public void addMovieToActor(@PathVariable long movieId, @PathVariable long actorId) {
 ////        Optional<Movie> movie = movieRepository.findById(movieId);

@@ -1,32 +1,24 @@
 package com.moviefy.backend.actor;
 
 import com.moviefy.backend.movie.Movie;
-import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-
-@Entity
-public class Actor {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ActorDTO {
     private String firstName;
     private String lastName;
     private String description;
     private LocalDate birthdate;
     private String height;
-    @OneToMany
     private List<Movie> movies;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public ActorDTO(Actor actor) {
+        this.firstName = actor.getFirstName();
+        this.lastName = actor.getLastName();
+        this.description = actor.getDescription();
+        this.birthdate = actor.getBirthdate();
+        this.height = actor.getHeight();
     }
 
     public String getFirstName() {

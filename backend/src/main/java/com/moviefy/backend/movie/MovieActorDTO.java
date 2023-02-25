@@ -2,47 +2,38 @@ package com.moviefy.backend.movie;
 
 import com.moviefy.backend.actor.Actor;
 import com.moviefy.backend.actor.ActorDTO;
-import jakarta.persistence.*;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
-public class Movie {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class MovieActorDTO {
     private String title;
     private double rating;
     private String director;
     private String scenario;
-    @ElementCollection(targetClass = Genre.class)
-    @CollectionTable
-    @Enumerated(EnumType.STRING)
     private List<Genre> genre;
     private String production;
     private LocalDate premiere;
     private URL poster;
-    @ElementCollection
     private List<URL> moviePhotos;
-    @OneToMany
     private List<Actor> actors;
-    @ElementCollection(targetClass = Awards.class)
-    @CollectionTable
-    @Enumerated(EnumType.STRING)
     private List<Awards> awards;
-    private int countRating;
-    public Movie() {
-    }
+    private List<ActorDTO> actorDTOS;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public MovieActorDTO(String title, double rating, String director, String scenario, List<Genre> genre, String production, LocalDate premiere, URL poster, List<URL> moviePhotos, List<Actor> actors, List<Awards> awards, List<ActorDTO> actorDTOS) {
+        this.title = title;
+        this.rating = rating;
+        this.director = director;
+        this.scenario = scenario;
+        this.genre = genre;
+        this.production = production;
+        this.premiere = premiere;
+        this.poster = poster;
+        this.moviePhotos = moviePhotos;
+        this.actors = actors;
+        this.awards = awards;
+        this.actorDTOS = actorDTOS;
     }
 
     public String getTitle() {
@@ -133,27 +124,11 @@ public class Movie {
         this.awards = awards;
     }
 
-    public int getCountRating() {
-        return countRating;
+    public List<ActorDTO> getActorDTOS() {
+        return actorDTOS;
     }
 
-    public void setCountRating(int countRating) {
-        this.countRating = countRating;
-    }
-
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "title='" + title + '\'' +
-                ", direction='" + director + '\'' +
-                ", scenario='" + scenario + '\'' +
-                ", genre='" + genre + '\'' +
-                ", production='" + production + '\'' +
-                ", premiere='" + premiere + '\'' +
-                ", poster='" + poster + '\'' +
-                ", moviePhotos='" + moviePhotos + '\'' +
-                ", awards='" + awards + '\'' +
-                ", id=" + id +
-                '}';
+    public void setActorDTOS(List<ActorDTO> actorDTOS) {
+        this.actorDTOS = actorDTOS;
     }
 }
