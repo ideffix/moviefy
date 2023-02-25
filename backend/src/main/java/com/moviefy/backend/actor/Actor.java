@@ -1,11 +1,10 @@
 package com.moviefy.backend.actor;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.moviefy.backend.movie.MovieDto;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Entity
@@ -19,6 +18,8 @@ public class Actor {
     private String description;
     private LocalDate birthdate;
     private String height;
+    @Transient
+    private List<MovieDto> movies;
 
     public Long getId() {
         return id;
@@ -66,5 +67,13 @@ public class Actor {
 
     public void setHeight(String height) {
         this.height = height;
+    }
+
+    public List<MovieDto> getMovies() {
+        return movies;
+    }
+
+    public void setMovies(List<MovieDto> movies) {
+        this.movies = movies;
     }
 }

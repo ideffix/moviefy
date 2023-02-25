@@ -4,7 +4,7 @@ import com.moviefy.backend.actor.Actor;
 import jakarta.persistence.*;
 
 import java.net.URL;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -14,7 +14,7 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private int rating;
+    private double rating;
     private String director;
     private String scenario;
     @ElementCollection(targetClass = Genre.class)
@@ -22,7 +22,7 @@ public class Movie {
     @Enumerated(EnumType.STRING)
     private List<Genre> genre;
     private String production;
-    private int premiere;
+    private LocalDate premiere;
     private URL poster;
     @ElementCollection
     private List<URL> moviePhotos;
@@ -41,8 +41,12 @@ public class Movie {
         return title;
     }
 
-    public int getRating() {
+    public double getRating() {
         return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public int getCountRating() {
@@ -89,11 +93,11 @@ public class Movie {
         this.production = production;
     }
 
-    public int getPremiere() {
+    public LocalDate getPremiere() {
         return premiere;
     }
 
-    public void setPremiere(int premiere) {
+    public void setPremiere(LocalDate premiere) {
         this.premiere = premiere;
     }
 

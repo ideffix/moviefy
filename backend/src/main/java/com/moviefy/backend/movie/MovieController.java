@@ -18,8 +18,6 @@ public class MovieController {
     MovieRepository movieRepository;
     @Autowired
     ActorRepository actorRepository;
-    @Autowired
-    RatingRepository ratingRepository;
 
 
     @CrossOrigin
@@ -79,7 +77,7 @@ public class MovieController {
             movie1.setRating(rating);
         }
         else {
-            int result = (movie1.getRating() * movie1.getCountRating() + rating) / (movie1.getCountRating() + 1);
+            double result = (movie1.getRating() * movie1.getCountRating() + rating) / (movie1.getCountRating() + 1);
             movie1.setRating(result);
         }
         movie1.setCountRating(movie1.getCountRating() + 1);
@@ -94,9 +92,14 @@ public class MovieController {
         if (movie.isEmpty() || actor.isEmpty()) {
             throw  new RuntimeException("Movie or actor not found!");
         }
+        MovieDto movieDto = new MovieDto(movie.get().getTitle(), movie.get().getRating(), movie.get().getDirector(),
+                movie.get().getScenario(), movie.get().getGenre(), movie.get().getProduction(), movie.get().getPremiere(),
+                movie.get().getPoster(), movie.get().getMoviePhotos(), movie.get().getActors(), movie.get().getAwards());
 
+        actor.get().getMovies().add(movieDto);
         movie.get().getActors().add(actor.get());
         movieRepository.save(movie.get());
+        actorRepository.save(actor.get());
     }
 
 }
