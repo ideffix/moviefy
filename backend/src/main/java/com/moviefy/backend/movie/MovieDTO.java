@@ -7,34 +7,31 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
-public class Movie {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class MovieDTO {
     private Long id;
     private String title;
     private int rating;
     private String director;
     private String scenario;
-    @ElementCollection(targetClass = Genre.class)
-    @CollectionTable
-    @Enumerated(EnumType.STRING)
     private List<Genre> genre;
     private String production;
     private LocalDate premiere;
     private URL poster;
-    @ElementCollection
     private List<URL> moviePhotos;
-    @OneToMany
-    private List<Actor> actors;
-    @ElementCollection(targetClass = Awards.class)
-    @CollectionTable
-    @Enumerated(EnumType.STRING)
     private List<Awards> awards;
-    private int countRating;
 
-    public Movie() {
+    public MovieDTO(Movie movie) {
+        this.id = movie.getId();
+        this.title = movie.getTitle();
+        this.rating = movie.getRating();
+        this.director = movie.getDirector();
+        this.scenario = movie.getScenario();
+        this.genre = movie.getGenre();
+        this.production = movie.getProduction();
+        this.premiere = movie.getPremiere();
+        this.poster = movie.getPoster();
+        this.moviePhotos = movie.getMoviePhotos();
+        this.awards = movie.getAwards();
     }
 
     public Long getId() {
@@ -117,14 +114,6 @@ public class Movie {
         this.moviePhotos = moviePhotos;
     }
 
-    public List<Actor> getActors() {
-        return actors;
-    }
-
-    public void setActors(List<Actor> actors) {
-        this.actors = actors;
-    }
-
     public List<Awards> getAwards() {
         return awards;
     }
@@ -132,14 +121,4 @@ public class Movie {
     public void setAwards(List<Awards> awards) {
         this.awards = awards;
     }
-
-    public int getCountRating() {
-        return countRating;
-    }
-
-    public void setCountRating(int countRating) {
-        this.countRating = countRating;
-    }
-
-
 }

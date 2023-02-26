@@ -18,8 +18,6 @@ public class MovieController {
     MovieRepository movieRepository;
     @Autowired
     ActorRepository actorRepository;
-    @Autowired
-    RatingRepository ratingRepository;
 
 
     @CrossOrigin
