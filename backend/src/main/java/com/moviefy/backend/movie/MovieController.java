@@ -22,14 +22,25 @@ public class MovieController {
 
     @CrossOrigin
     @GetMapping("/movies")
-    public Iterable<Movie> getMovies() {
-        return movieRepository.findAll();
+    public List<MovieDTOWithList> getMovies() {
+        Iterable<Movie> movies = movieRepository.findAll();
+        List<MovieDTOWithList> movieDTOList = new ArrayList<>();
+
+        for (Movie movie : movies) {
+            MovieDTOWithList movieDTO = new MovieDTOWithList(movie);
+            movieDTOList.add(movieDTO);
+        }
+        return movieDTOList;
     }
 
     @CrossOrigin
     @GetMapping("/movie/{id}")
-    public Optional<Movie> getUserById(@PathVariable Long id) {
-        return movieRepository.findById(id);
+    public MovieDTOWithList getUserById(@PathVariable Long id) {
+        Optional<Movie> movie = movieRepository.findById(id);
+        if (movie.isEmpty()) {
+            throw new RuntimeException("Movie not found!");
+        }
+        return new MovieDTOWithList(movie.get());
     }
 
     @CrossOrigin
