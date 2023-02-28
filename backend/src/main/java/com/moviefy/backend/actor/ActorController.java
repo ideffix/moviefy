@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping
@@ -59,20 +60,13 @@ public class ActorController {
     }
     @GetMapping("/actor/{actorId}")
     public ActorDTO searchActorById(@PathVariable long actorId) {
-        Iterable<Actor> actors = actorRepository.findAll();
+        Optional<Actor> actor = actorRepository.findById(actorId);
         List<MovieDTO> movieDTO = new ArrayList<>();
-        for (Actor actor : actors) {
-            if (actor.getId() == actorId) {
-                for (Movie movie : movieRepository.findAll()) {
-                    for (Actor actor1 : movie.getActors()) {
-                        if (actor1.getId() == actorId) {
-                            movieDTO.add(new MovieDTO(movie));
-                        }
-                    }
-                }
-                return new ActorDTO(actor, movieDTO);
-            }
+
+        for (Movie movie : actor.get().getMovies()) {
+            movieDTO.add(new MovieDTO(movie));
         }
-        throw new RuntimeException("Actor not found!");
+
+        return new ActorDTO(actor.orElseThrow(() -> new RuntimeException("Actor not found!")), movieDTO);
     }
 }

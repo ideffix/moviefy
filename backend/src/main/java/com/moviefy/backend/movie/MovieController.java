@@ -2,6 +2,7 @@ package com.moviefy.backend.movie;
 
 import com.moviefy.backend.QueryResponse;
 import com.moviefy.backend.actor.Actor;
+import com.moviefy.backend.actor.ActorDTOWithoutList;
 import com.moviefy.backend.actor.ActorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,22 +26,32 @@ public class MovieController {
     public List<MovieDTOWithList> getMovies() {
         Iterable<Movie> movies = movieRepository.findAll();
         List<MovieDTOWithList> movieDTOList = new ArrayList<>();
+        List<ActorDTOWithoutList> actorDTOWithoutLists = new ArrayList<>();
 
         for (Movie movie : movies) {
-            MovieDTOWithList movieDTO = new MovieDTOWithList(movie);
+            for (Actor actor : movie.getActors()) {
+                actorDTOWithoutLists.add(new ActorDTOWithoutList(actor));
+            }
+            MovieDTOWithList movieDTO = new MovieDTOWithList(movie, actorDTOWithoutLists);
             movieDTOList.add(movieDTO);
         }
         return movieDTOList;
     }
 
     @CrossOrigin
-    @GetMapping("/movie/{id}")
+    @GetMapping("/movies/{id}")
     public MovieDTOWithList getUserById(@PathVariable Long id) {
         Optional<Movie> movie = movieRepository.findById(id);
         if (movie.isEmpty()) {
             throw new RuntimeException("Movie not found!");
         }
-        return new MovieDTOWithList(movie.get());
+        List<ActorDTOWithoutList> actorDTOWithoutList = new ArrayList<>();
+        for (Actor actor : movie.get().getActors()) {
+            actorDTOWithoutList.add(new ActorDTOWithoutList(actor));
+        }
+        MovieDTOWithList movieDTOWithList = new MovieDTOWithList(movie.get(), actorDTOWithoutList);
+
+        return movieDTOWithList;
     }
 
     @CrossOrigin
@@ -106,6 +117,8 @@ public class MovieController {
 
         movie.get().getActors().add(actor.get());
         movieRepository.save(movie.get());
+        actor.get().getMovies().add(movie.get());
+        actorRepository.save(actor.get());
     }
 
 }

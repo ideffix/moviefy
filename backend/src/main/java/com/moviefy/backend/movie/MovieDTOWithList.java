@@ -1,6 +1,7 @@
 package com.moviefy.backend.movie;
 
 import com.moviefy.backend.actor.Actor;
+import com.moviefy.backend.actor.ActorDTOWithoutList;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -17,10 +18,10 @@ public class MovieDTOWithList {
     private LocalDate premiere;
     private URL poster;
     private List<URL> moviePhotos;
-    private List<Actor> actors;
+    private List<ActorDTOWithoutList> actors;
     private List<Awards> awards;
 
-    public MovieDTOWithList(Movie movie) {
+    public MovieDTOWithList(Movie movie, List<ActorDTOWithoutList> actorDTOWithoutLists) {
         this.id = movie.getId();
         this.title = movie.getTitle();
         this.rating = movie.getRating();
@@ -31,7 +32,7 @@ public class MovieDTOWithList {
         this.premiere = movie.getPremiere();
         this.poster = movie.getPoster();
         this.moviePhotos = movie.getMoviePhotos();
-        this.actors = movie.getActors();
+        this.actors = actorDTOWithoutLists;
         this.awards = movie.getAwards();
     }
 
@@ -115,11 +116,11 @@ public class MovieDTOWithList {
         this.moviePhotos = moviePhotos;
     }
 
-    public List<Actor> getActors() {
+    public List<ActorDTOWithoutList> getActors() {
         return actors;
     }
 
-    public void setActors(List<Actor> actors) {
+    public void setActors(List<ActorDTOWithoutList> actors) {
         this.actors = actors;
     }
 
