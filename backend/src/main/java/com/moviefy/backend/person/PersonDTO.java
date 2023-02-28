@@ -1,22 +1,31 @@
 package com.moviefy.backend.person;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
 import java.time.LocalDate;
 
-@Entity
-public class Person {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PersonDTO {
     private Long id;
     private String firstName;
     private String lastName;
     private String description;
     private LocalDate birthdate;
     private String height;
+
+    public PersonDTO(Person person) {
+        this.id = person.getId();
+        this.firstName = person.getFirstName();
+        this.lastName = person.getLastName();
+        this.description = person.getDescription();
+        this.birthdate = person.getBirthdate();
+        this.height = person.getHeight();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -56,13 +65,5 @@ public class Person {
 
     public void setHeight(String height) {
         this.height = height;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

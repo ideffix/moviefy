@@ -4,6 +4,9 @@ import com.moviefy.backend.person.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping
 public class ScenarioController{
@@ -17,7 +20,12 @@ public class ScenarioController{
     }
 
     @GetMapping("/scenario")
-    public Iterable<Person> getProduction() {
-        return scenarioRepository.findAll();
+    public List<ScenarioDTO> getProduction() {
+        Iterable<Scenario> scenarios = scenarioRepository.findAll();
+        List<ScenarioDTO> scenarioDTOList = new ArrayList<>();
+        for (Scenario scenario : scenarios) {
+            scenarioDTOList.add(new ScenarioDTO(scenario));
+        }
+        return scenarioDTOList;
     }
 }

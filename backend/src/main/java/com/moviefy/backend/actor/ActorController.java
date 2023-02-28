@@ -46,7 +46,7 @@ public class ActorController {
     }
 
     @GetMapping("/actor/byname/{actorName}")
-    public List<Actor> serchActorByName(@PathVariable String actorName) {
+    public List<Actor> searchActorByName(@PathVariable String actorName) {
         Iterable<Actor> actors = actorRepository.findAll();
         List<Actor> actorList = new ArrayList<>();
         for (Actor actor : actors) {
@@ -58,10 +58,9 @@ public class ActorController {
         return actorList;
     }
     @GetMapping("/actor/byid/{actorId}")
-    public ActorDTO serchActorById(@PathVariable long actorId) {
+    public ActorDTO searchActorById(@PathVariable long actorId) {
         Iterable<Actor> actors = actorRepository.findAll();
         List<MovieDTO> movieDTO = new ArrayList<>();
-        ActorDTO actorDTO;
         for (Actor actor : actors) {
             if (actor.getId() == actorId) {
                 for (Movie movie : movieRepository.findAll()) {

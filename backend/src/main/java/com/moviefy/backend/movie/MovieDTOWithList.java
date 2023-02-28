@@ -1,7 +1,6 @@
 package com.moviefy.backend.movie;
 
 import com.moviefy.backend.actor.Actor;
-import jakarta.persistence.*;
 
 import java.net.URL;
 import java.time.LocalDate;
