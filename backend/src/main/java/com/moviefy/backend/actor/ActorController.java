@@ -57,7 +57,7 @@ public class ActorController {
         }
         return actorList;
     }
-    @GetMapping("/actor/byid/{actorId}")
+    @GetMapping("/actor/{actorId}")
     public ActorDTO searchActorById(@PathVariable long actorId) {
         Iterable<Actor> actors = actorRepository.findAll();
         List<MovieDTO> movieDTO = new ArrayList<>();

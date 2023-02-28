@@ -26,7 +26,7 @@ public class Movie {
     private URL poster;
     @ElementCollection
     private List<URL> moviePhotos;
-    @OneToMany
+    @ManyToMany
     private List<Actor> actors;
     @ElementCollection(targetClass = Awards.class)
     @CollectionTable
