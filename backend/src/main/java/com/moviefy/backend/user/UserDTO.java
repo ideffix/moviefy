@@ -1,24 +1,23 @@
 package com.moviefy.backend.user;
 
-import com.moviefy.backend.movie.Awards;
-import jakarta.persistence.*;
-
 import java.util.List;
 
-@Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserDTO {
     private long id;
-    private String userName;
     private String firstName;
     private String lastName;
     private String email;
     private String passwors;
-    @ElementCollection(targetClass = Role.class)
-    @CollectionTable
-    @Enumerated(EnumType.STRING)
     private List<Role> role;
+
+    public UserDTO(User user) {
+        this.id = user.getId();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.passwors = user.getPasswors();
+        this.role = user.getRole();
+    }
 
     public long getId() {
         return id;
@@ -66,13 +65,5 @@ public class User {
 
     public void setRole(List<Role> role) {
         this.role = role;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 }
