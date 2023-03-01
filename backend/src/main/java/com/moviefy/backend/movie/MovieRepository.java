@@ -9,5 +9,6 @@ import java.util.List;
 
 @Repository
 public interface MovieRepository extends CrudRepository<Movie, Long> {
-
+    @Query("SELECT m FROM Movie m ORDER BY m.rating DESC")
+    List<Movie> findTopMovies();
 }

@@ -61,7 +61,7 @@ public class MovieController {
     }
 
     @CrossOrigin
-    @GetMapping("/movie/title/{title}")
+    @GetMapping("/movies/title/{title}")
     public QueryResponse getMovieByTitle(@PathVariable String title) {
         Iterable<Movie> iterableMovie = movieRepository.findAll();
         Iterable<Actor> iterableActor = actorRepository.findAll();
@@ -85,7 +85,7 @@ public class MovieController {
         return new QueryResponse(movieFound, actorFound);
     }
 
-    @PutMapping("/movie/rating/{movieId}/{rating}")
+    @PutMapping("/movies/rating/{movieId}/{rating}")
     public void ratingVideo(@PathVariable long movieId, @PathVariable int rating) {
         if (!(0 <= rating && rating <= 10)) {
             throw new RuntimeException("Wrong value given!\n");
@@ -106,7 +106,7 @@ public class MovieController {
         movieRepository.save(movie1);
     }
 
-    @PutMapping("/movie/{movieId}/{actorId}")
+    @PutMapping("/movies/{movieId}/{actorId}")
     public void addActorToMovie(@PathVariable long movieId, @PathVariable long actorId) {
         Optional<Movie> movie = movieRepository.findById(movieId);
         Optional<Actor> actor = actorRepository.findById(actorId);
@@ -119,6 +119,11 @@ public class MovieController {
         movieRepository.save(movie.get());
         actor.get().getMovies().add(movie.get());
         actorRepository.save(actor.get());
+    }
+
+    @GetMapping("/movies/ranking")
+    public List<Movie> getTopTeenMovies() {
+        return movieRepository.findTopMovies();
     }
 
 }
