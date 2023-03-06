@@ -15,7 +15,7 @@ public class User {
     private String lastName;
     private String email;
     private String passwors;
-    @ElementCollection(targetClass = Role.class)
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable
     @Enumerated(EnumType.STRING)
     private List<Role> role;

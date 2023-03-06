@@ -1,38 +1,34 @@
 package com.moviefy.backend.user;
 
+import com.moviefy.backend.utilityClass.RandomToken;
+import com.moviefy.backend.validators.Validators;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.support.GenericWebApplicationContext;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping
 public class UserController {
-
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    TokenService tokenService;
+
+    @Autowired
+    GenericWebApplicationContext context;
 
     @PostMapping("/users")
     public User addUser(@RequestBody User user) {
-        String passwordToHash = user.getPasswors();
-        if (passwordToHash != null) {
-            String generatedPassword = null;
-            try {
-                MessageDigest md = MessageDigest.getInstance("SHA-256");
-                byte[] bytes = md.digest(passwordToHash.getBytes());
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < bytes.length; i++) {
-                    sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-                }
-                generatedPassword = sb.toString();
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-            user.setPasswors(generatedPassword);
-        }
+        UserRegistration.registration(user.getPasswors(), user.getEmail());
+        user.setPasswors(UserRegistration.hashPassword(user.getPasswors()));
         return userRepository.save(user);
     }
 
@@ -45,5 +41,30 @@ public class UserController {
             userDTOList.add(new UserDTO(user));
         }
         return userDTOList;
+    }
+
+    @GetMapping("users/{userId}")
+    public UserDTO getUserById(@PathVariable long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new RuntimeException("User not found!");
+        }
+        return new UserDTO(user.get());
+    }
+
+    @GetMapping("/users/registration/{email}/{password}")
+    public String loginUser(@PathVariable String email, @PathVariable String password) {
+        String hashPassword = UserRegistration.hashPassword(password);
+        Optional<User> user = userRepository.findUserByEmailAndPassword(hashPassword, email);
+        if (user.isEmpty()) {
+            throw new RuntimeException("User not found! Bad email or password!");
+        }
+        return tokenService.createToken(user.get().getId());
+    }
+
+    @GetMapping("/users/me")
+    public CurrentUser getMyData() {
+        CurrentUser currentUser = context.getBean(CurrentUser.class);
+        return currentUser;
     }
 }

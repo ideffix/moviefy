@@ -1,14 +1,13 @@
 package com.moviefy.backend.movie;
 
-import com.moviefy.backend.actor.Actor;
-import jakarta.persistence.*;
-
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 
-public class MovieDTO {
+public class MovieDTOWithoutList {
+    private Long id;
     private String title;
+    private int rating;
     private String director;
     private String scenario;
     private List<Genre> genre;
@@ -18,17 +17,26 @@ public class MovieDTO {
     private List<URL> moviePhotos;
     private List<Awards> awards;
 
-    public MovieDTO(String title, String director, String scenario, List<Genre> genre,
-                    String production, LocalDate premiere, URL poster, List<URL> moviePhotos, List<Awards> awards) {
-        this.title = title;
-        this.director = director;
-        this.scenario = scenario;
-        this.genre = genre;
-        this.production = production;
-        this.premiere = premiere;
-        this.poster = poster;
-        this.moviePhotos = moviePhotos;
-        this.awards = awards;
+    public MovieDTOWithoutList(Movie movie) {
+        this.id = movie.getId();
+        this.title = movie.getTitle();
+        this.rating = movie.getRating();
+        this.director = movie.getDirector();
+        this.scenario = movie.getScenario();
+        this.genre = movie.getGenre();
+        this.production = movie.getProduction();
+        this.premiere = movie.getPremiere();
+        this.poster = movie.getPoster();
+        this.moviePhotos = movie.getMoviePhotos();
+        this.awards = movie.getAwards();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -37,6 +45,14 @@ public class MovieDTO {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public String getDirector() {

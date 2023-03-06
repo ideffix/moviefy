@@ -1,26 +1,24 @@
 package com.moviefy.backend.actor;
 
-import com.moviefy.backend.movie.Movie;
-import com.moviefy.backend.movie.MovieDTO;
-import jakarta.persistence.ElementCollection;
+import com.moviefy.backend.movie.MovieDTOWithoutList;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 
-public class ActorDTO {
+public class ActorDTOWithList {
     private Long id;
     private String firstName;
     private String lastName;
     private String description;
     private LocalDate birthdate;
     private String height;
-    private List<MovieDTO> movieDTOS;
+    private List<MovieDTOWithoutList> movieDTOS;
     private URL profilePhoto;
     private List<URL> photos;
 
 
-    public ActorDTO(Actor actor, List<MovieDTO> movieDTOS) {
+    public ActorDTOWithList(Actor actor, List<MovieDTOWithoutList> movieDTOS) {
         this.id = actor.getId();
         this.firstName = actor.getFirstName();
         this.lastName = actor.getLastName();
@@ -81,11 +79,11 @@ public class ActorDTO {
         this.height = height;
     }
 
-    public List<MovieDTO> getMovieDTOS() {
+    public List<MovieDTOWithoutList> getMovieDTOS() {
         return movieDTOS;
     }
 
-    public void setMovieDTOS(List<MovieDTO> movieDTOS) {
+    public void setMovieDTOS(List<MovieDTOWithoutList> movieDTOS) {
         this.movieDTOS = movieDTOS;
     }
 

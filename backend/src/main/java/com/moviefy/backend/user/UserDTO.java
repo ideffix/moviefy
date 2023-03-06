@@ -7,7 +7,6 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String email;
-    private String passwors;
     private List<Role> role;
 
     public UserDTO(User user) {
@@ -15,7 +14,6 @@ public class UserDTO {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
-        this.passwors = user.getPasswors();
         this.role = user.getRole();
     }
 
@@ -49,14 +47,6 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPasswors() {
-        return passwors;
-    }
-
-    public void setPasswors(String passwors) {
-        this.passwors = passwors;
     }
 
     public List<Role> getRole() {

@@ -34,6 +34,18 @@ public class Movie {
     private List<Awards> awards;
     private int countRating;
 
+    public Movie(String title, String director, String scenario, List<Genre> genre, String production, LocalDate premiere, URL poster, List<URL> moviePhotos, List<Awards> awards) {
+        this.title = title;
+        this.director = director;
+        this.scenario = scenario;
+        this.genre = genre;
+        this.production = production;
+        this.premiere = premiere;
+        this.poster = poster;
+        this.moviePhotos = moviePhotos;
+        this.awards = awards;
+    }
+
     public Movie() {
     }
 

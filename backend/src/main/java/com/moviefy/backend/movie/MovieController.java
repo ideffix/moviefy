@@ -49,15 +49,13 @@ public class MovieController {
         for (Actor actor : movie.get().getActors()) {
             actorDTOWithoutList.add(new ActorDTOWithoutList(actor));
         }
-        MovieDTOWithList movieDTOWithList = new MovieDTOWithList(movie.get(), actorDTOWithoutList);
-
-        return movieDTOWithList;
+        return new MovieDTOWithList(movie.get(), actorDTOWithoutList);
     }
 
     @CrossOrigin
     @PostMapping("/movies")
-    public Movie createMovie(@RequestBody Movie movie) {
-        return movieRepository.save(movie);
+    public Movie createMovie(@RequestBody MovieDTO movieDTO) {
+        return movieRepository.save(new Movie(movieDTO.getTitle(), movieDTO.getDirector(), movieDTO.getScenario(), movieDTO.getGenre(), movieDTO.getProduction(), movieDTO.getPremiere(), movieDTO.getPoster(), movieDTO.getMoviePhotos(), movieDTO.getAwards()));
     }
 
     @CrossOrigin

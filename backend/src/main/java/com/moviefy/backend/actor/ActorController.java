@@ -1,7 +1,7 @@
 package com.moviefy.backend.actor;
 
 import com.moviefy.backend.movie.Movie;
-import com.moviefy.backend.movie.MovieDTO;
+import com.moviefy.backend.movie.MovieDTOWithoutList;
 import com.moviefy.backend.movie.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,21 +27,21 @@ public class ActorController {
 
     @CrossOrigin
     @GetMapping("/actor")
-    public List<ActorDTO> getActors() {
+    public List<ActorDTOWithList> getActors() {
         Iterable<Actor> actors = actorRepository.findAll();
         Iterable<Movie> movies = movieRepository.findAll();
-        List<ActorDTO> actorDTOS = new ArrayList<>();
+        List<ActorDTOWithList> actorDTOS = new ArrayList<>();
         for (Actor actor : actors) {
-            List<MovieDTO> movieDTOS = new ArrayList<>();
+            List<MovieDTOWithoutList> movieDTOS = new ArrayList<>();
             for (Movie movie : movies) {
                 for (Actor actor1 : movie.getActors()) {
                     if (actor.getId() == actor1.getId()) {
-                        MovieDTO movieDTO = new MovieDTO(movie);
+                        MovieDTOWithoutList movieDTO = new MovieDTOWithoutList(movie);
                         movieDTOS.add(movieDTO);
                     }
                 }
             }
-            actorDTOS.add(new ActorDTO(actor, movieDTOS));
+            actorDTOS.add(new ActorDTOWithList(actor, movieDTOS));
          }
         return actorDTOS;
     }
@@ -59,14 +59,14 @@ public class ActorController {
         return actorList;
     }
     @GetMapping("/actor/{actorId}")
-    public ActorDTO searchActorById(@PathVariable long actorId) {
+    public ActorDTOWithList searchActorById(@PathVariable long actorId) {
         Optional<Actor> actor = actorRepository.findById(actorId);
-        List<MovieDTO> movieDTO = new ArrayList<>();
+        List<MovieDTOWithoutList> movieDTO = new ArrayList<>();
 
         for (Movie movie : actor.get().getMovies()) {
-            movieDTO.add(new MovieDTO(movie));
+            movieDTO.add(new MovieDTOWithoutList(movie));
         }
 
-        return new ActorDTO(actor.orElseThrow(() -> new RuntimeException("Actor not found!")), movieDTO);
+        return new ActorDTOWithList(actor.orElseThrow(() -> new RuntimeException("Actor not found!")), movieDTO);
     }
 }
