@@ -1,5 +1,6 @@
 package com.moviefy.backend.user;
 
+import com.moviefy.backend.filters.CurrentUserHolder;
 import com.moviefy.backend.utilityClass.RandomToken;
 import com.moviefy.backend.validators.Validators;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,8 @@ public class UserController {
     UserRepository userRepository;
     @Autowired
     TokenService tokenService;
-
     @Autowired
-    GenericWebApplicationContext context;
+    CurrentUserHolder currentUserHolder;
 
     @PostMapping("/users")
     public User addUser(@RequestBody User user) {
@@ -64,7 +64,6 @@ public class UserController {
 
     @GetMapping("/users/me")
     public CurrentUser getMyData() {
-        CurrentUser currentUser = context.getBean(CurrentUser.class);
-        return currentUser;
+        return currentUserHolder.getCurrentUser();
     }
 }

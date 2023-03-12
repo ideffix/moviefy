@@ -6,6 +6,8 @@ import com.moviefy.backend.user.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -24,7 +26,7 @@ public class UserFiler implements Filter {
     @Autowired
     TokenService tokenService;
     @Autowired
-    GenericWebApplicationContext context;
+    private CurrentUserHolder currentUserHolder;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -32,7 +34,7 @@ public class UserFiler implements Filter {
         String token = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         UserDTO userDTO = tokenService.getUser(token);
 
-        context.registerBean(CurrentUser.class, () -> new CurrentUser(userDTO.getId(), userDTO.getEmail(), userDTO.getRole()));
+        currentUserHolder.setCurrentUser(new CurrentUser(userDTO.getId(), userDTO.getEmail(), userDTO.getRole()));
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
