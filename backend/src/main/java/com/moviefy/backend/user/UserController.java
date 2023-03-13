@@ -66,4 +66,14 @@ public class UserController {
     public CurrentUser getMyData() {
         return currentUserHolder.getCurrentUser();
     }
+
+    @GetMapping("/admin/check")
+    public String getAdmin() {
+        return "Dziala";
+    }
+
+    @GetMapping("/user/check")
+    public String getUser() {
+        return "Dziala";
+    }
 }

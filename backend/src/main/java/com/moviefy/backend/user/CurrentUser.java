@@ -5,9 +5,9 @@ import java.util.List;
 public class CurrentUser {
     private long id;
     private String email;
-    private List<Role> role;
+    private List<Roles> role;
 
-    public CurrentUser(long id, String email, List<Role> role) {
+    public CurrentUser(long id, String email, List<Roles> role) {
         this.id = id;
         this.email = email;
         this.role = role;
@@ -29,11 +29,11 @@ public class CurrentUser {
         this.email = email;
     }
 
-    public List<Role> getRole() {
+    public List<Roles> getRole() {
         return role;
     }
 
-    public void setRole(List<Role> role) {
+    public void setRole(List<Roles> role) {
         this.role = role;
     }
 }

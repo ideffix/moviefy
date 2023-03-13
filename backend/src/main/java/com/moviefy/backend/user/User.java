@@ -1,6 +1,5 @@
 package com.moviefy.backend.user;
 
-import com.moviefy.backend.movie.Awards;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -15,10 +14,10 @@ public class User {
     private String lastName;
     private String email;
     private String passwors;
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
     @CollectionTable
     @Enumerated(EnumType.STRING)
-    private List<Role> role;
+    private List<Roles> role;
 
     public long getId() {
         return id;
@@ -60,11 +59,11 @@ public class User {
         this.passwors = passwors;
     }
 
-    public List<Role> getRole() {
+    public List<Roles> getRole() {
         return role;
     }
 
-    public void setRole(List<Role> role) {
+    public void setRole(List<Roles> role) {
         this.role = role;
     }
 

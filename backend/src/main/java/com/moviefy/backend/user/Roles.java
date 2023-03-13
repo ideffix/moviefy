@@ -1,5 +1,5 @@
 package com.moviefy.backend.user;
 
-public enum Role {
+public enum Roles {
     ADMIN, USER
 }

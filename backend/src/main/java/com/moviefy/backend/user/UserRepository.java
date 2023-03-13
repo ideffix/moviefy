@@ -10,7 +10,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
     User findByUserName(String userName);
-
     @Query("SELECT u FROM User u WHERE u.passwors = :passwords AND u.email = :email")
     Optional<User> findUserByEmailAndPassword(@Param("passwords") String passwords, @Param("email") String email);
 }

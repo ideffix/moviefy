@@ -7,7 +7,7 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String email;
-    private List<Role> role;
+    private List<Roles> role;
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -49,11 +49,11 @@ public class UserDTO {
         this.email = email;
     }
 
-    public List<Role> getRole() {
+    public List<Roles> getRole() {
         return role;
     }
 
-    public void setRole(List<Role> role) {
+    public void setRole(List<Roles> role) {
         this.role = role;
     }
 }

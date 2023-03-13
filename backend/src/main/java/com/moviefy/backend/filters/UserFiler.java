@@ -2,20 +2,17 @@ package com.moviefy.backend.filters;
 
 
 import com.moviefy.backend.scenario.ScenarioRepository;
-import com.moviefy.backend.user.*;
+import com.moviefy.backend.user.CurrentUser;
+import com.moviefy.backend.user.TokenService;
+import com.moviefy.backend.user.UserDTO;
+import com.moviefy.backend.user.UserRepository;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.context.support.GenericWebApplicationContext;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Optional;
 
 @Component
 public class UserFiler implements Filter {
