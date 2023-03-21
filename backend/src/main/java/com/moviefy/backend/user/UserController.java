@@ -1,6 +1,7 @@
 package com.moviefy.backend.user;
 
 import com.moviefy.backend.filters.CurrentUserHolder;
+import com.moviefy.backend.token.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,7 +56,7 @@ public class UserController {
         return tokenService.createToken(user.get().getId());
     }
 
-    @GetMapping("/users/me")
+    @GetMapping("/user/me")
     public CurrentUser getMyData() {
         return currentUserHolder.getCurrentUser();
     }
