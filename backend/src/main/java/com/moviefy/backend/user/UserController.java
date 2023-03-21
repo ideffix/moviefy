@@ -1,17 +1,10 @@
 package com.moviefy.backend.user;
 
 import com.moviefy.backend.filters.CurrentUserHolder;
-import com.moviefy.backend.utilityClass.RandomToken;
-import com.moviefy.backend.validators.Validators;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.support.GenericWebApplicationContext;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,14 +18,14 @@ public class UserController {
     @Autowired
     CurrentUserHolder currentUserHolder;
 
-    @PostMapping("/users")
+    @PostMapping("/publicusers")
     public User addUser(@RequestBody User user) {
         UserRegistration.registration(user.getPasswors(), user.getEmail());
         user.setPasswors(UserRegistration.hashPassword(user.getPasswors()));
         return userRepository.save(user);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/publicusers")
     public List<UserDTO> getUsers() {
         Iterable<User> users = userRepository.findAll();
         List<UserDTO> userDTOList = new ArrayList<>();
@@ -43,7 +36,7 @@ public class UserController {
         return userDTOList;
     }
 
-    @GetMapping("users/{userId}")
+    @GetMapping("publicusers/{userId}")
     public UserDTO getUserById(@PathVariable long userId) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
@@ -52,7 +45,7 @@ public class UserController {
         return new UserDTO(user.get());
     }
 
-    @GetMapping("/users/registration/{email}/{password}")
+    @GetMapping("/publicusers/registration/{email}/{password}")
     public String loginUser(@PathVariable String email, @PathVariable String password) {
         String hashPassword = UserRegistration.hashPassword(password);
         Optional<User> user = userRepository.findUserByEmailAndPassword(hashPassword, email);
