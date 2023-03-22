@@ -5,6 +5,13 @@ import com.moviefy.backend.token.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +54,7 @@ public class UserController {
     }
 
     @GetMapping("/publicusers/registration/{email}/{password}")
-    public String loginUser(@PathVariable String email, @PathVariable String password) {
+    public String loginUser(@PathVariable String email, @PathVariable String password) throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         String hashPassword = UserRegistration.hashPassword(password);
         Optional<User> user = userRepository.findUserByEmailAndPassword(hashPassword, email);
         if (user.isEmpty()) {

@@ -20,11 +20,10 @@ public class CryptoImpl implements Crypto {
 
     @Override
     public String decrypt(byte[] hash, PrivateKey privateKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        Cipher cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
         byte[] decryptedMessage = cipher.doFinal(hash);
-        String newString = new String(decryptedMessage, StandardCharsets.UTF_8);
-        return newString;
+        return new String(decryptedMessage, StandardCharsets.UTF_8);
     }
 
     @Override

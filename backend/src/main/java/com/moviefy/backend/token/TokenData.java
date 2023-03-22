@@ -1,8 +1,9 @@
 package com.moviefy.backend.token;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class TokenData {
+public class TokenData implements Serializable {
     private Long id;
     private LocalDateTime time;
 
