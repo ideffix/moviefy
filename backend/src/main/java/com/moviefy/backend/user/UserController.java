@@ -1,5 +1,6 @@
 package com.moviefy.backend.user;
 
+import com.moviefy.backend.crypto.CryptoImpl;
 import com.moviefy.backend.filters.CurrentUserHolder;
 import com.moviefy.backend.token.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,7 @@ public class UserController {
     TokenService tokenService;
     @Autowired
     CurrentUserHolder currentUserHolder;
+    CryptoImpl crypto = new CryptoImpl();
 
     @PostMapping("/publicusers")
     public User addUser(@RequestBody User user) {
@@ -60,7 +63,8 @@ public class UserController {
         if (user.isEmpty()) {
             throw new RuntimeException("User not found! Bad email or password!");
         }
-        return tokenService.createToken(user.get().getId());
+        KeyPair code = crypto.createKeys();
+        return tokenService.createToken(user.get().getId(), code);
     }
 
     @GetMapping("/user/me")

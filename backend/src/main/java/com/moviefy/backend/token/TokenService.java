@@ -5,19 +5,18 @@ import com.moviefy.backend.crypto.CryptoImpl;
 import com.moviefy.backend.user.User;
 import com.moviefy.backend.user.UserDTO;
 import com.moviefy.backend.user.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.io.*;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -25,34 +24,43 @@ import java.util.Optional;
 public class TokenService {
     Base64Impl base64 = new Base64Impl();
     CryptoImpl crypto = new CryptoImpl();
+
     KeyPair code;
     private static final int TIME_LIMIT_IN_SECONDS = 300;
     private final HashMap<String, TokenData> tokenMap = new HashMap<>();
     private final UserRepository userRepository;
 
+    @Autowired
+    TokenData tokenData;
+
     public TokenService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public String createToken(Long userId) throws IOException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+    public String createToken(Long userId, KeyPair keyPair) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         LocalDateTime loginData = LocalDateTime.now();
         TokenData tokenData = new TokenData(userId, loginData);
+        code = keyPair;
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
         oos.writeObject(tokenData);
         byte[] tokenDataBytes = bos.toByteArray();
-        String tokenDataString = Base64.getEncoder().encodeToString(tokenDataBytes);
 
-        byte[] decode = base64.decode(tokenDataString);
-        code = crypto.createKeys();
-        return crypto.decrypt(decode, code.getPrivate());
+        byte[] encryptedTokenData = crypto.encrypt(tokenDataBytes.toString(), code.getPublic());
+        String encryptedTokenDataString = base64.encode(encryptedTokenData);
+
+        return encryptedTokenDataString;
     }
 
-    public UserDTO getUser(String object) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IOException, ClassNotFoundException {
-        byte[] tab = crypto.encrypt(object, code.getPublic());
-        String d = base64.encode(tab);
-        TokenData tokenData = decodeToken(d);
+    public UserDTO getUser(String token) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IOException, ClassNotFoundException {
+        byte[] encryptedTokenData = base64.decode(token);
+        String decryptedTokenDataBytes = crypto.decrypt(encryptedTokenData, code.getPrivate());
+
+        ByteArrayInputStream bis = new ByteArrayInputStream(decryptedTokenDataBytes.getBytes());
+        ObjectInputStream ois = new ObjectInputStream(bis);
+        TokenData tokenData = (TokenData) ois.readObject();
+
         Optional<User> user = userRepository.findById(tokenData.getId());
         if (user.isEmpty()) {
             throw new RuntimeException("User not found!");
