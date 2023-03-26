@@ -41,4 +41,12 @@ public class TokenData implements Serializable {
     public void setTime(LocalDateTime time) {
         this.time = time;
     }
+
+    @Override
+    public String toString() {
+        return "TokenData{" +
+                "id=" + id +
+                ", time=" + time +
+                '}';
+    }
 }

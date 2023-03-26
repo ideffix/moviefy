@@ -12,6 +12,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.io.*;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
@@ -37,16 +38,16 @@ public class TokenService {
         this.userRepository = userRepository;
     }
 
-    public String createToken(Long userId, KeyPair keyPair) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+    public String createToken(Long userId, KeyPair keyPair) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
         LocalDateTime loginData = LocalDateTime.now();
         TokenData tokenData = new TokenData(userId, loginData);
-        code = keyPair;
+        code = crypto.createKeys();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
         oos.writeObject(tokenData);
         byte[] tokenDataBytes = bos.toByteArray();
-
+        String a = tokenDataBytes.toString();
         byte[] encryptedTokenData = crypto.encrypt(tokenDataBytes.toString(), code.getPublic());
         String encryptedTokenDataString = base64.encode(encryptedTokenData);
 
