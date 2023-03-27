@@ -1,5 +1,7 @@
 package com.moviefy.backend.token;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.moviefy.backend.crypto.Base64Impl;
 import com.moviefy.backend.crypto.CryptoImpl;
 import com.moviefy.backend.user.User;
@@ -11,7 +13,10 @@ import org.springframework.stereotype.Service;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
@@ -41,28 +46,26 @@ public class TokenService {
     public String createToken(Long userId, KeyPair keyPair) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
         LocalDateTime loginData = LocalDateTime.now();
         TokenData tokenData = new TokenData(userId, loginData);
-        code = crypto.createKeys();
+        code = keyPair;
 
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(tokenData);
-        byte[] tokenDataBytes = bos.toByteArray();
-        String a = tokenDataBytes.toString();
-        byte[] encryptedTokenData = crypto.encrypt(tokenDataBytes.toString(), code.getPublic());
-        String encryptedTokenDataString = base64.encode(encryptedTokenData);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        String tokenDataJson = objectMapper.writeValueAsString(tokenData);
+
+        String encryptedTokenDataString = base64.encode(tokenDataJson.getBytes(StandardCharsets.UTF_8));
 
         return encryptedTokenDataString;
     }
 
     public UserDTO getUser(String token) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IOException, ClassNotFoundException {
         byte[] encryptedTokenData = base64.decode(token);
-        String decryptedTokenDataBytes = crypto.decrypt(encryptedTokenData, code.getPrivate());
+        String json = new String(encryptedTokenData, StandardCharsets.UTF_8);
 
-        ByteArrayInputStream bis = new ByteArrayInputStream(decryptedTokenDataBytes.getBytes());
-        ObjectInputStream ois = new ObjectInputStream(bis);
-        TokenData tokenData = (TokenData) ois.readObject();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        TokenData tokenDataJson = objectMapper.readValue(json, TokenData.class);
 
-        Optional<User> user = userRepository.findById(tokenData.getId());
+        Optional<User> user = userRepository.findById(tokenDataJson.getId());
         if (user.isEmpty()) {
             throw new RuntimeException("User not found!");
         }

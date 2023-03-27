@@ -1,6 +1,5 @@
 package com.moviefy.backend.scenario;
 
-import com.moviefy.backend.person.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping
-public class ScenarioController{
+public class ScenarioController {
 
     @Autowired
     ScenarioRepository scenarioRepository;
