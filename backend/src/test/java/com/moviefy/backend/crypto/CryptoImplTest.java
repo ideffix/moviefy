@@ -24,7 +24,7 @@ class CryptoImplTest {
 
     @Test
     void test() throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        KeyPair key = crypto.createKeys();
+        KeyPair key = crypto.createKeys("abc");
         byte[] nwm = crypto.encrypt("Mateusz", key.getPublic());
         String mwn = crypto.decrypt(nwm, key.getPrivate());
 

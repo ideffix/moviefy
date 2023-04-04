@@ -1,7 +1,7 @@
 package com.moviefy.backend.token;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.moviefy.backend.crypto.Base64Impl;
 import com.moviefy.backend.crypto.CryptoImpl;
 import com.moviefy.backend.user.User;
@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
@@ -31,39 +28,35 @@ public class TokenService {
     Base64Impl base64 = new Base64Impl();
     CryptoImpl crypto = new CryptoImpl();
 
+    @Autowired
     KeyPair code;
+
+    @Autowired
+    ObjectMapper objectMapper;
     private static final int TIME_LIMIT_IN_SECONDS = 300;
     private final HashMap<String, TokenData> tokenMap = new HashMap<>();
     private final UserRepository userRepository;
-
-    @Autowired
-    TokenData tokenData;
 
     public TokenService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public String createToken(Long userId, KeyPair keyPair) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
+    public String createToken(Long userId) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
         LocalDateTime loginData = LocalDateTime.now();
         TokenData tokenData = new TokenData(userId, loginData);
-        code = keyPair;
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        String tokenDataJson = objectMapper.writeValueAsString(tokenData);
+        String tokenDataJson = writeTokenDataAsJson(tokenData);
 
-        String encryptedTokenDataString = base64.encode(tokenDataJson.getBytes(StandardCharsets.UTF_8));
+        byte[] encrypt = crypto.encrypt(tokenDataJson, code.getPublic());
 
-        return encryptedTokenDataString;
+        return base64.encode(encrypt);
     }
 
     public UserDTO getUser(String token) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IOException, ClassNotFoundException {
         byte[] encryptedTokenData = base64.decode(token);
-        String json = new String(encryptedTokenData, StandardCharsets.UTF_8);
+        String decrypt = crypto.decrypt(encryptedTokenData, code.getPrivate());
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        TokenData tokenDataJson = objectMapper.readValue(json, TokenData.class);
+        TokenData tokenDataJson = readTokenDataFromJson(decrypt);
 
         Optional<User> user = userRepository.findById(tokenDataJson.getId());
         if (user.isEmpty()) {
@@ -82,11 +75,12 @@ public class TokenService {
         }
     }
 
-    public TokenData decodeToken(String tokenString) throws IOException, ClassNotFoundException {
-        byte[] byteArray = base64.decode(tokenString);
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-        TokenData tokenData = (TokenData) objectInputStream.readObject();
-        return tokenData;
+    TokenData readTokenDataFromJson(String decrypt) throws JsonProcessingException {
+        return objectMapper.readValue(decrypt, TokenData.class);
     }
+
+    String writeTokenDataAsJson(TokenData tokenData) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(tokenData);
+    }
+
 }

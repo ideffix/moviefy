@@ -14,8 +14,7 @@ public class CryptoImpl implements Crypto {
     public byte[] encrypt(String message, PublicKey publicKey) throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-        byte[] encryptedMessage = cipher.doFinal(message.getBytes(StandardCharsets.UTF_8));
-        return encryptedMessage;
+        return cipher.doFinal(message.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
@@ -27,11 +26,10 @@ public class CryptoImpl implements Crypto {
     }
 
     @Override
-    public KeyPair createKeys() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+    public KeyPair createKeys(String password) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
         KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
         RSAKeyGenParameterSpec spec = new RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4);
-        keyPairGen.initialize(spec, new SecureRandom());
-        KeyPair keyPair = keyPairGen.generateKeyPair();
-        return keyPair;
+        keyPairGen.initialize(spec, new SecureRandom(password.getBytes(StandardCharsets.UTF_8)));
+        return keyPairGen.generateKeyPair();
     }
 }

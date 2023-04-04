@@ -10,5 +10,5 @@ public interface Crypto {
 
     String decrypt(byte[] hash, PrivateKey privateKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException;
 
-    KeyPair createKeys() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException;
+    KeyPair createKeys(String password) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException;
 }
